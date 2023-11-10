@@ -1,5 +1,11 @@
+// Sample data for the table
+let data = [
+    { col1: 'Data 1', col2: 'Data A', col3: 'Value X' },
+    { col1: 'Data 2', col2: 'Data B', col3: 'Value Y' },
+    // Add more data as needed
+];
+
 document.addEventListener('DOMContentLoaded', () => {
-    loadDataFromLocalStorage();
     populateTable(data);
 });
 
@@ -34,8 +40,32 @@ function addRow() {
     const newData = { col1: 'New Data', col2: 'New Value', col3: 'New Info' };
     data.push(newData);
     populateTable(data);
-    saveDataToLocalStorage(); // Save data after adding a row
 }
+
+function editRow(index) {
+    // Implement your edit logic here
+    console.log('Edit row:', index);
+}
+
+
+function deleteRow(index) {
+    const tableBody = document.querySelector('#data-table tbody');
+    const row = tableBody.rows[index];
+
+    // Display a confirmation dialog
+    const confirmDelete = confirm('Do you want to delete the row?');
+
+    if (confirmDelete) {
+        // Remove the row from the table
+        tableBody.removeChild(row);
+
+        // Remove the corresponding data from the array
+        data.splice(index, 1);
+
+        saveDataToLocalStorage(); // Save data after deleting a row
+    }
+}
+
 
 function editRow(index) {
     const tableBody = document.querySelector('#data-table tbody');
@@ -67,7 +97,7 @@ function editRow(index) {
 function saveRow(index) {
     const tableBody = document.querySelector('#data-table tbody');
     const row = tableBody.rows[index];
-
+    saveDataToLocalStorage();
     // Create an object to store the updated row data
     const updatedRow = {};
 
@@ -94,32 +124,6 @@ function saveRow(index) {
 
     // Update the data array with the edited row
     data[index] = updatedRow;
-
-    saveDataToLocalStorage(); // Save data after editing a row
-}
-
-function editRow(index) {
-    // Implement your edit logic here
-    console.log('Edit row:', index);
-}
-
-
-function deleteRow(index) {
-    const tableBody = document.querySelector('#data-table tbody');
-    const row = tableBody.rows[index];
-
-    // Display a confirmation dialog
-    const confirmDelete = confirm('Do you want to delete the row?');
-
-    if (confirmDelete) {
-        // Remove the row from the table
-        tableBody.removeChild(row);
-
-        // Remove the corresponding data from the array
-        data.splice(index, 1);
-
-        saveDataToLocalStorage(); // Save data after deleting a row
-    }
 }
 
 
@@ -129,6 +133,26 @@ function saveDataToLocalStorage() {
 
 function loadDataFromLocalStorage() {
     const storedData = localStorage.getItem('tableData');
-    data = storedData ? JSON.parse(storedData) : [];
-    populateTable(data);
+    const loadedData = storedData ? JSON.parse(storedData) : [];
+    data = loadedData;
+    const tableBody = document.querySelector('#data-table tbody');
+    tableBody.innerHTML = '';
+    data.forEach((row, index) => {
+        const newRow = tableBody.insertRow();
+        for (const key in row) {
+            const cell = newRow.insertCell();
+            cell.textContent = row[key];
+        }
+        const actionsCell = newRow.insertCell();
+        actionsCell.innerHTML = `<button onclick="editRow(${index})">Edit</button>
+                                 <button onclick="deleteRow(${index})">Delete</button>`;
+    });
 }
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadDataFromLocalStorage();
+    populateTable(data);
+});
