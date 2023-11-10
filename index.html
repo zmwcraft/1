@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Table Management</title>
+</head>
+
+<body>
+
+    <nav>
+        <button onclick="addRow()">Add Row</button>
+        <input autofocus="" type="text" id="search" placeholder="Search" oninput="filterTable()">
+        
+    </nav>
+
+    <div id="table-container">
+        <table id="data-table" contenteditable="">
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 3</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be added dynamically using JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
